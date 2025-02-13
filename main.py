@@ -1,33 +1,41 @@
 def count_words(text):
     words = text.split()
-    return len(words)  # Return word count
-
-def count_letters(text):
-    letters = [char for char in text if char.isalpha()]  # Count only letters
-    return len(letters)  # Return letter count
+    return len(words)
 
 def count_characters(text):
-    text = text.lower()  # Convert text to lowercase
-    char_count = {}  # Dictionary to store counts
+    text = text.lower()
+    char_count = {}
     
     for char in text:
-        if char in char_count:
-            char_count[char] += 1
-        else:
-            char_count[char] = 1
+        if char.isalpha():  # Count only alphabetic characters
+            if char in char_count:
+                char_count[char] += 1
+            else:
+                char_count[char] = 1
+    
+    return char_count
 
-    return char_count  # Return dictionary of character counts
+def print_report(filepath, word_count, char_count):
+    print(f"--- Begin report of {filepath} ---")
+    print(f"{word_count} words found in the document\n")
+    
+    sorted_chars = sorted(char_count.items(), key=lambda item: item[1], reverse=True)
+    
+    for char, count in sorted_chars:
+        print(f"The '{char}' character was found {count} times")
+    
+    print("--- End report ---")
 
 def main():
-    with open("books/frankenstein.txt", "r", encoding="utf-8") as f:
+    filepath = "books/frankenstein.txt"
+    
+    with open(filepath, "r", encoding="utf-8") as f:
         file_contents = f.read()
     
-    word_count = count_words(file_contents)  
-    letter_count = count_letters(file_contents)  
-    char_count = count_characters(file_contents)  # Call new function
+    word_count = count_words(file_contents)
+    char_count = count_characters(file_contents)
     
-    print(f"Word count: {word_count}")
-    print(f"Letter count: {letter_count}")
-    print("Character count:", char_count)  # Print dictionary
+    print_report(filepath, word_count, char_count)
 
-main()
+if __name__ == "__main__":
+    main()
